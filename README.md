@@ -2,7 +2,7 @@
 
 > 面向投资研究者的个人 Agent 工作台：给出一个研究目标，系统会**规划任务 → 调用金融工具 → 把每个数字记入证据账本 → 在需要时请你确认 → 输出区分「事实 / 推断 / 不确定」的可验证研究报告**，并且能停止、恢复、回滚、压缩上下文、记住你的偏好。
 
-- **在线体验**：<https://weiyingle1201.github.io/X-Buddy/>（无需任何 Key，默认演示模式；也可在「设置」中填入扶摇 API Key 切换为实时数据）
+- **在线体验**：<https://claude.ai/artifact/AL9q3T8mfDPX94P4cDv5vK>（无需任何 Key，默认演示模式；也可在「设置」中填入扶摇 API Key 切换为实时数据）
 - **源代码**：<https://github.com/weiyingle1201/X-Buddy>
 - **配套文档**：[AI 使用与验证记录](docs/AI_USAGE.md) · [测试说明](docs/TESTING.md) 
 
