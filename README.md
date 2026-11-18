@@ -4,7 +4,7 @@
 
 - **在线体验**：<https://weiyingle1201.github.io/X-Buddy/>（无需任何 Key，默认演示模式；也可在「设置」中填入扶摇 API Key 切换为实时数据）
 - **源代码**：<https://github.com/weiyingle1201/X-Buddy>
-- **配套文档**：[AI 使用与验证记录](docs/AI_USAGE.md) · [测试说明](docs/TESTING.md) · [演示脚本（60–180 秒）](docs/DEMO_SCRIPT.md)
+- **配套文档**：[AI 使用与验证记录](docs/AI_USAGE.md) · [测试说明](docs/TESTING.md) 
 
 ---
 
