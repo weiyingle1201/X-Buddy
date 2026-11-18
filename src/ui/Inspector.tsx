@@ -5,6 +5,7 @@ import { CheckpointMeta } from '../core/runtime';
 import { EvidenceStatus, FaultType, MemoryItem, RunState, Settings } from '../core/types';
 import { fmtDate, fmtNum, percentile } from '../core/util';
 import { STATUS_LABEL } from './Blocks';
+import { ui } from './Dialog';
 
 export type Tab = 'evidence' | 'trace' | 'context' | 'checkpoints' | 'memory' | 'tools';
 const TABS: [Tab, string][] = [
@@ -150,13 +151,7 @@ function TraceTab({ run }: { run?: RunState }) {
   const t1 = Math.max(...spans.map((s) => s.end!), t0 + 1);
   const toolLat = spans.filter((s) => s.kind === 'tool' && s.parentId).map((s) => s.end! - s.start);
   const errors = spans.filter((s) => s.kind === 'tool' && s.parentId && s.status === 'error').length;
-  const exportTrace = () => {
-    const blob = new Blob([JSON.stringify({ run: run.id, usage: run.usage, spans: run.spans, events: run.events }, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `trace-${run.id}.json`;
-    a.click();
-  };
+  const exportTrace = () => ui.exportText('导出 Trace（JSON）', `trace-${run.id}.json`, JSON.stringify({ run: run.id, usage: run.usage, spans: run.spans, events: run.events }, null, 2), 'application/json');
   return (
     <div>
       <div className="usage" style={{ marginTop: 0, marginBottom: 10 }}>
@@ -287,7 +282,7 @@ function CheckpointTab({ run, metas, onRestore, active }: { run?: RunState; meta
         disabled={!active}
         title="刷新页面以模拟进程崩溃，用于验证中断恢复"
         onClick={() => {
-          if (confirm('将立即刷新页面以模拟崩溃，刷新后可在顶部横幅中从检查点恢复。继续？')) location.reload();
+          ui.confirm('将立即刷新页面以模拟崩溃，刷新后可在顶部横幅中从检查点恢复。', () => location.reload(), '刷新页面');
         }}
       >
         ⚡ 模拟崩溃（刷新页面）

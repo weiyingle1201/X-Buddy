@@ -38,7 +38,7 @@ export function SettingsDrawer({ initial, onClose, onSave }: { initial: Settings
               实时（扶摇 / iFinD）
             </button>
           </div>
-          <div className="help">演示模式无需任何 Key，数值为人工构造、结构对齐扶摇 API；实时模式调用真实接口。</div>
+          <div className="help">演示模式无需任何 Key，数值为人工构造、结构对齐扶摇 API；实时模式由浏览器直接调用真实接口。若页面运行在禁止外部请求的托管沙箱中（如 claude.ai Artifact），实时模式会显示“网络错误”，请改用 GitHub Pages 地址或本地 npm run dev。</div>
         </div>
 
         <div className="field">

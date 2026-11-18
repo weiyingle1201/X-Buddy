@@ -7,6 +7,7 @@ import { uid } from '../core/util';
 import { Inspector, Tab } from './Inspector';
 import { RunActions, RunCard } from './RunCard';
 import { SettingsDrawer } from './SettingsDrawer';
+import { DialogHost, ui } from './Dialog';
 
 const SAMPLES: [string, string][] = [
   ['研究贵州茅台的基本面和估值', '个股研究 · 写记忆需确认'],
@@ -142,7 +143,7 @@ export function App() {
 
   const saveSet = (s: Settings) => {
     if (anyActive) {
-      alert('有运行正在执行，请先停止后再修改设置。');
+      ui.alert('有运行正在执行，请先停止后再修改设置。');
       return;
     }
     saveSettings(s);
@@ -158,7 +159,9 @@ export function App() {
   const llmOn = services.llm.enabled();
 
   const deleteThread = (id: string) => {
-    if (!confirm('删除该线程及其运行记录（本地）？')) return;
+    ui.confirm('删除该线程及其运行记录（仅本机浏览器中的数据）？', () => doDeleteThread(id), '删除');
+  };
+  const doDeleteThread = (id: string) => {
     const t = threads.find((x) => x.id === id);
     for (const r of t?.runIds ?? []) {
       kv.del(`run:${r}`);
@@ -324,10 +327,11 @@ export function App() {
           runActive={selRun ? runtime.isActive(selRun.id) : false}
           onRestore={(seq) => {
             if (!selRun) return;
-            if (confirm(`回滚到检查点 #${seq}？之后的证据与产物将被丢弃，运行进入暂停状态。`)) {
-              runtime.restore(selRun.id, seq);
+            const rid = selRun.id;
+            ui.confirm(`回滚到检查点 #${seq}？之后的证据与产物将被丢弃，运行进入暂停状态。`, () => {
+              runtime.restore(rid, seq);
               rerender();
-            }
+            }, '回滚');
           }}
           memory={memory}
           memVersion={memVersion}
@@ -337,6 +341,7 @@ export function App() {
           setFault={setFault}
         />
       </div>
+      <DialogHost />
       {showSettings && <SettingsDrawer initial={settings} onClose={() => setShowSettings(false)} onSave={saveSet} />}
     </div>
   );

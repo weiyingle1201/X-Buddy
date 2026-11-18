@@ -3,6 +3,7 @@ import { intentLabel } from '../core/runtime';
 import { Artifact, RunState } from '../core/types';
 import { fmtDate } from '../core/util';
 import { Blocks, CitedText, EvCtx } from './Blocks';
+import { ui } from './Dialog';
 
 const STATUS: Record<RunState['status'], [string, string]> = {
   planning: ['规划中', 'accent'],
@@ -177,14 +178,6 @@ export function RunCard({ run, active, act }: { run: RunState; active: boolean; 
   );
 }
 
-function download(name: string, text: string, type = 'text/markdown') {
-  const blob = new Blob([text], { type: `${type};charset=utf-8` });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-}
 
 function ReportCard({ art, run, ctx }: { art: Artifact; run: RunState; ctx: EvCtx }) {
   const summary: string = (art as any).summary ?? '';
@@ -197,10 +190,10 @@ function ReportCard({ art, run, ctx }: { art: Artifact; run: RunState; ctx: EvCt
         <span className="badge" title="摘要来源">{art.narrativeSource === 'llm' ? '摘要：LLM（已校验）' : '摘要：模板'}</span>
         <span className="muted hide-sm">{fmtDate(art.createdAt, true)}</span>
         <span style={{ flex: 1 }} />
-        <button className="btn sm" onClick={() => download(`${art.title}-v${art.version}.md`, art.markdown)}>
+        <button className="btn sm" onClick={() => ui.exportText('导出报告（Markdown，含证据附录）', `${art.title}-v${art.version}.md`, art.markdown)}>
           导出 Markdown
         </button>
-        <button className="btn sm" onClick={() => download(`${art.title}-evidence.json`, JSON.stringify({ run: { id: run.id, goal: run.goal, dataMode: run.dataMode }, evidence: run.evidence }, null, 2), 'application/json')}>
+        <button className="btn sm" onClick={() => ui.exportText('导出证据账本（JSON）', `${art.title}-evidence.json`, JSON.stringify({ run: { id: run.id, goal: run.goal, dataMode: run.dataMode }, evidence: run.evidence }, null, 2), 'application/json')}>
           导出证据 JSON
         </button>
       </div>
